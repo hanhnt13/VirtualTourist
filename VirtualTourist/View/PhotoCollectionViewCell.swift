@@ -6,13 +6,33 @@
 //
 
 import UIKit
+import CoreData
 
 class PhotoCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var imageView: UIImageView!
     
     override func prepareForReuse() {
-        imageView.image = nil
+        if let image = UIImage(systemName: "photo.fill") {
+            imageView.image = image
+        } else {
+            imageView.image = nil
+        }
+    }
+    
+    func setup(by photo: Photo) {
+        imageView.contentMode = .scaleAspectFit
+        guard let source = photo.source else {
+            return
+        }
+        Services.shared.downloadImage(url: source) { [weak self] (data, error) in
+            if let data = data {
+                let downloadedImage = UIImage(data: data)
+                if let downloadedImage = downloadedImage {
+                    self?.imageView.image = downloadedImage
+                }
+            }
+        }
     }
 }
 

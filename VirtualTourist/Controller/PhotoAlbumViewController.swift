@@ -86,7 +86,6 @@ class PhotoAlbumViewController: UIViewController {
         }
         
         noPhotosWarning.isHidden = true
-        let total = response.photos.photo.count
         let dispatchGroup = DispatchGroup()
         for image in response.photos.photo {
             dispatchGroup.enter()
@@ -144,18 +143,7 @@ extension PhotoAlbumViewController: UICollectionViewDelegate, UICollectionViewDa
         }
         
         let photo = photos[indexPath.row]
-        if let source = photo.source {
-            service.downloadImage(url: source) { (data, error) in
-                if let data = data {
-                    let downloadedImage = UIImage(data: data)
-                    if let downloadedImage = downloadedImage {
-                        cell.imageView.image = downloadedImage
-                    }
-                }
-            }
-        }
-        
-        cell.imageView.contentMode = .scaleAspectFit
+        cell.setup(by: photo)
 
         return cell
     }
