@@ -22,14 +22,17 @@ class PhotoCollectionViewCell: UICollectionViewCell {
     
     func setup(by photo: Photo) {
         imageView.contentMode = .scaleAspectFit
-        guard let source = photo.source else {
-            return
-        }
-        Services.shared.downloadImage(url: source) { [weak self] (data, error) in
-            if let data = data {
-                let downloadedImage = UIImage(data: data)
-                if let downloadedImage = downloadedImage {
-                    self?.imageView.image = downloadedImage
+        if let data = photo.imageData {
+            imageView.image = UIImage(data: data)
+        } else if let source = photo.source {
+            Services.shared.downloadImage(url: source) { [weak self] (data, error) in
+                if let data = data {
+                    photo.imageData = data
+                    CoreDataManager.shared.saveContext()
+                    let downloadedImage = UIImage(data: data)
+                    if let downloadedImage = downloadedImage {
+                        self?.imageView.image = downloadedImage
+                    }
                 }
             }
         }

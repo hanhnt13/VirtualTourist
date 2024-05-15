@@ -17,7 +17,7 @@ class PhotoAlbumViewController: UIViewController {
     var availablePages: Int?
     var pin: Pin!
     var photos: [Photo] {
-        pin.photos?.allObjects as? [Photo] ?? []
+        pin.photos?.array as? [Photo] ?? []
     }
     
     @IBOutlet weak var mapView: MKMapView!
@@ -55,11 +55,21 @@ class PhotoAlbumViewController: UIViewController {
     func setupCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.reloadData()
+        if photos.count == 0 {
+            loadImage()
+        }
     }
     
     @IBAction func fetchNewCollection() {
         page += 1
+        loadImage()
+    }
+    
+    func setupButton(by loading: Bool) {
+        newCollectionButton.isEnabled = !loading
+    }
+    
+    func loadImage() {
         setupButton(by: true)
         service.searchPhoto(lat: pin.lat, lon: pin.long, page: page) { [weak self] response, error in
             guard let response = response else {
@@ -70,10 +80,6 @@ class PhotoAlbumViewController: UIViewController {
             
             self?.handleResponse(response)
         }
-    }
-    
-    func setupButton(by loading: Bool) {
-        newCollectionButton.isEnabled = !loading
     }
     
     func handleResponse(_ response: SearchPhotoResponse) {
@@ -129,7 +135,7 @@ extension PhotoAlbumViewController: MKMapViewDelegate {
 extension PhotoAlbumViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (collectionView.bounds.width - 32) / 3
+        let width = (UIScreen.main.bounds.width - 32) / 3
         return CGSize(width: width, height: width)
     }
     
