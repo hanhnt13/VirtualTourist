@@ -71,6 +71,10 @@ class CoreDataManager: NSObject {
         return annotations
     }
     
+    func removePhoto(_ photo: Photo) {
+        viewContext.delete(photo)
+    }
+    
     func saveContext() {
         if viewContext.hasChanges {
             do {

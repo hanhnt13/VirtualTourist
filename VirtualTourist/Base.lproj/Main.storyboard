@@ -2,7 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Za5-Cy-Xde">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Map view configurations" minToolsVersion="14.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -92,11 +92,17 @@
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lNc-x0-Dum">
                                                     <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                                    <color key="backgroundColor" red="0.33333333329999998" green="0.33725490200000002" blue="0.3411764706" alpha="1" colorSpace="calibratedRGB"/>
                                                 </imageView>
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="Pas-Ou-5f3">
+                                                    <rect key="frame" x="54" y="54" width="20" height="20"/>
+                                                </activityIndicatorView>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="lNc-x0-Dum" firstAttribute="top" secondItem="AOl-As-Yfs" secondAttribute="top" id="BE1-ty-Yin"/>
+                                                <constraint firstItem="Pas-Ou-5f3" firstAttribute="centerX" secondItem="AOl-As-Yfs" secondAttribute="centerX" id="F3K-Bn-xhc"/>
                                                 <constraint firstAttribute="trailing" secondItem="lNc-x0-Dum" secondAttribute="trailing" id="I63-ah-u8r"/>
+                                                <constraint firstItem="Pas-Ou-5f3" firstAttribute="centerY" secondItem="AOl-As-Yfs" secondAttribute="centerY" id="MS9-MX-1gb"/>
                                                 <constraint firstAttribute="bottom" secondItem="lNc-x0-Dum" secondAttribute="bottom" id="W8l-za-nOf"/>
                                                 <constraint firstItem="lNc-x0-Dum" firstAttribute="leading" secondItem="AOl-As-Yfs" secondAttribute="leading" id="pqD-HG-wMA"/>
                                             </constraints>
@@ -104,6 +110,7 @@
                                         <size key="customSize" width="128" height="128"/>
                                         <connections>
                                             <outlet property="imageView" destination="lNc-x0-Dum" id="h49-9V-bps"/>
+                                            <outlet property="indicator" destination="Pas-Ou-5f3" id="XHi-3b-DIW"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -116,6 +123,20 @@
                                 <color key="textColor" systemColor="secondaryLabelColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="BZt-4H-xA1">
+                                <rect key="frame" x="0.0" y="565.33333333333337" width="393" height="40.333333333333371"/>
+                                <subviews>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="oJh-pl-B8K">
+                                        <rect key="frame" x="186.66666666666666" y="0.0" width="20" height="20"/>
+                                    </activityIndicatorView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Fetching photos ..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5u0-cD-oWa">
+                                        <rect key="frame" x="125.66666666666667" y="20" width="141.66666666666663" height="20.333333333333329"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yIu-k4-WWt">
                                 <rect key="frame" x="0.0" y="808" width="393" height="44"/>
                                 <constraints>
@@ -136,13 +157,17 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="HDU-dm-acb" firstAttribute="bottom" secondItem="dzU-FW-ufx" secondAttribute="bottom" id="19f-BZ-Ke5"/>
+                            <constraint firstItem="BZt-4H-xA1" firstAttribute="leading" secondItem="dzU-FW-ufx" secondAttribute="leading" id="2gg-uW-A7X"/>
                             <constraint firstAttribute="bottom" secondItem="yIu-k4-WWt" secondAttribute="bottom" id="2ua-Jj-XC9"/>
                             <constraint firstItem="HDU-dm-acb" firstAttribute="leading" secondItem="dzU-FW-ufx" secondAttribute="leading" id="AD1-HP-2hW"/>
+                            <constraint firstItem="dzU-FW-ufx" firstAttribute="trailing" secondItem="BZt-4H-xA1" secondAttribute="trailing" id="AiZ-Ed-zf7"/>
                             <constraint firstItem="Ibd-3D-zDl" firstAttribute="top" secondItem="dzU-FW-ufx" secondAttribute="top" id="DGa-Mk-WsJ"/>
                             <constraint firstItem="Ibd-3D-zDl" firstAttribute="leading" secondItem="dzU-FW-ufx" secondAttribute="leading" id="FoG-bf-gfu"/>
                             <constraint firstItem="yIu-k4-WWt" firstAttribute="trailing" secondItem="dzU-FW-ufx" secondAttribute="trailing" id="Kty-Nr-zbT"/>
                             <constraint firstItem="dzU-FW-ufx" firstAttribute="trailing" secondItem="Ibd-3D-zDl" secondAttribute="trailing" id="KxS-VG-nMB"/>
                             <constraint firstItem="HDU-dm-acb" firstAttribute="top" secondItem="Ibd-3D-zDl" secondAttribute="bottom" id="a0C-yk-2AP"/>
+                            <constraint firstItem="BZt-4H-xA1" firstAttribute="centerY" secondItem="HDU-dm-acb" secondAttribute="centerY" id="aSa-oS-sY6"/>
+                            <constraint firstItem="BZt-4H-xA1" firstAttribute="centerX" secondItem="HDU-dm-acb" secondAttribute="centerX" id="iYS-Hm-pYt"/>
                             <constraint firstItem="yIu-k4-WWt" firstAttribute="leading" secondItem="dzU-FW-ufx" secondAttribute="leading" id="pUP-t5-dQi"/>
                             <constraint firstItem="dzU-FW-ufx" firstAttribute="trailing" secondItem="HDU-dm-acb" secondAttribute="trailing" id="vb7-Ji-wNJ"/>
                         </constraints>
@@ -150,6 +175,7 @@
                     <navigationItem key="navigationItem" id="kf5-dc-40o"/>
                     <connections>
                         <outlet property="collectionView" destination="HDU-dm-acb" id="3bV-Ig-yOx"/>
+                        <outlet property="loadingView" destination="BZt-4H-xA1" id="Eeg-zO-ExV"/>
                         <outlet property="mapView" destination="Ibd-3D-zDl" id="uXU-dw-IAv"/>
                         <outlet property="newCollectionButton" destination="1U3-tC-wEw" id="7F9-LK-XyX"/>
                         <outlet property="noPhotosWarning" destination="enb-zb-e97" id="mln-UR-zf1"/>

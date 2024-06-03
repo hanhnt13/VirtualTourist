@@ -24,12 +24,12 @@ class PhotoAlbumViewController: UIViewController {
     @IBOutlet weak var newCollectionButton: UIBarButtonItem!
     @IBOutlet weak var noPhotosWarning: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var loadingView: UIStackView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupMapView()
         setupCollectionView()
-        noPhotosWarning.isHidden = photos.count > 0
     }
     
     func setupMapView() {
@@ -57,6 +57,9 @@ class PhotoAlbumViewController: UIViewController {
         collectionView.dataSource = self
         if photos.count == 0 {
             loadImage()
+        } else {
+            noPhotosWarning.isHidden = true
+            loadingView.isHidden = true
         }
     }
     
@@ -71,7 +74,15 @@ class PhotoAlbumViewController: UIViewController {
     
     func loadImage() {
         setupButton(by: true)
+        for photo in photos {
+            coreDataManager.removePhoto(photo)
+        }
+        coreDataManager.saveContext()
+        collectionView.reloadData()
+        noPhotosWarning.isHidden = true
+        loadingView.isHidden = false
         service.searchPhoto(lat: pin.lat, lon: pin.long, page: page) { [weak self] response, error in
+            self?.loadingView.isHidden = true
             guard let response = response else {
                 self?.noPhotosWarning.isHidden = false
                 self?.setupButton(by: false)
@@ -83,7 +94,6 @@ class PhotoAlbumViewController: UIViewController {
     }
     
     func handleResponse(_ response: SearchPhotoResponse) {
-        pin.photos = []
         availablePages = response.photos.pages
         guard response.photos.photo.count > 0 else {
             noPhotosWarning.isHidden = false
@@ -94,25 +104,14 @@ class PhotoAlbumViewController: UIViewController {
         noPhotosWarning.isHidden = true
         let dispatchGroup = DispatchGroup()
         for image in response.photos.photo {
-            dispatchGroup.enter()
-            service.getSource(photoID: image.id) { [weak self] response, error in
-                dispatchGroup.leave()
-                guard let weakSelf = self, let response = response else {
-                    return
-                }
-                if let lastPhoto = response.sizes.size.first {
-                    let newPhoto = Photo(context: weakSelf.coreDataManager.viewContext)
-                    newPhoto.id = image.id
-                    newPhoto.source = URL(string: lastPhoto.source)
-                    weakSelf.pin.addToPhotos(newPhoto)
-                    weakSelf.coreDataManager.saveContext()
-                }
-            }
+            let newPhoto = Photo(context: coreDataManager.viewContext)
+            newPhoto.id = image.id
+            pin.addToPhotos(newPhoto)
+            coreDataManager.saveContext()
         }
-        dispatchGroup.notify(queue: .main) { [weak self] in
-            self?.collectionView.reloadData()
-            self?.setupButton(by: false)
-        }
+        coreDataManager.saveContext()
+        collectionView.reloadData()
+        setupButton(by: false)
     }
 }
 
@@ -156,8 +155,8 @@ extension PhotoAlbumViewController: UICollectionViewDelegate, UICollectionViewDa
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let photo = photos[indexPath.row]
-        pin.removeFromPhotos(photo)
-        CoreDataManager.shared.saveContext()
+        coreDataManager.removePhoto(photo)
+        coreDataManager.saveContext()
         collectionView.reloadData()
     }
     
